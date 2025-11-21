@@ -1,8 +1,6 @@
 package com.ipartek.spring.elpisito.apirest.models.services;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +14,8 @@ public class TipoImpl implements TipoService{
 	private TipoDAO tipoDao;
 
 	@Override
-	public Optional<Tipo> findById(Long id) throws Exception {
-		
-		if (!tipoDao.findById(id).isPresent()) {
-			throw new Exception("No se ha encontrado al usuario con la id " + id);
-		}
-		
-		return tipoDao.findById(id);
+	public Tipo findById(Long id){
+		return tipoDao.findById(id).orElseThrow( () -> new RuntimeException("No se ha podido encontrar al usuario") );
 	}
 
 	@Override
