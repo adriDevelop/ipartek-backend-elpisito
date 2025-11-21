@@ -10,10 +10,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,7 +78,7 @@ public class UsuarioRestController {
 		Usuario resultado = new Usuario();
 		
 		try {
-			resultado = usuarioService.findById(id);			
+			resultado = usuarioService.findById(id);
 		}catch(Exception e) {
 			response.put("mensaje", "Ha ocurrido un error en la BBDD");
 			response.put("mensaje de error", e.getMessage());
@@ -116,6 +119,27 @@ public class UsuarioRestController {
 		}
 		
 		return new ResponseEntity<Usuario>(resultado, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/usuario/{id}")
+	ResponseEntity<?> delete(@PathVariable Long id){
+		
+		Map<String, Object> response = new LinkedHashMap<>();
+		
+		try {				
+				
+				usuarioService.deleteById(id);
+				
+			
+		}catch(Exception e) {
+			
+			response.put("mensaje de error", e.getMessage());
+			
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<String>("Se ha eliminado correctamente", HttpStatus.OK);
+		
 	}
 	
 	

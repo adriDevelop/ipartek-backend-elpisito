@@ -1,6 +1,7 @@
 package com.ipartek.spring.elpisito.apirest.models.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,25 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public Usuario findById(Long id) {
-		return usuarioDao.findById(id).orElse(null);
+	public Usuario findById(Long id) throws Exception {
+		Optional<Usuario> usuario = usuarioDao.findById(id);
+		if (usuario.isPresent()) {
+			return usuarioDao.findById(id).get();
+		}else {
+			throw new Exception("No se ha encontrado al usuario con id " + id);
+		}
 	}
 
 	@Override
-	public void deleteById(Long id) {
-		usuarioDao.deleteById(id);
+	public void deleteById(Long id) throws Exception {
+		
+		Optional<Usuario> usuario = usuarioDao.findById(id);
+		
+		if (usuario.isPresent()) {
+			usuarioDao.deleteById(id);
+		}else {
+			throw new Exception("Usuario no encontrado");
+		}
 	}
 
 	

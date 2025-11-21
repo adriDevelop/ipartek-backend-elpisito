@@ -1,6 +1,7 @@
 package com.ipartek.spring.elpisito.apirest.models.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ipartek.spring.elpisito.apirest.models.entities.Usuario;
 
@@ -19,9 +20,9 @@ public interface UsuarioService{
 	Usuario save(Usuario usuario);
 	
 	// Método que devuelva a un Usuario por su id
-	Usuario findById(Long id);
+	Usuario findById(Long id) throws Exception;
 	
 	// Método que devuelva al usuario de la BBDD y lo borre
-	void deleteById(Long id);
+	void deleteById(Long id) throws Exception;
 	
 }
