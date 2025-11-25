@@ -8,7 +8,7 @@ import com.ipartek.spring.elpisito.apirest.models.dao.TipoDAO;
 import com.ipartek.spring.elpisito.apirest.models.entities.Tipo;
 
 @Service
-public class TipoImpl implements TipoService{
+public class TipoImpl implements GeneralService<Tipo>{
 	
 	@Autowired
 	private TipoDAO tipoDao;
@@ -24,8 +24,8 @@ public class TipoImpl implements TipoService{
 	}
 
 	@Override
-	public void save(Tipo tipo) {
-		tipoDao.save(tipo);
+	public Tipo save(Tipo tipo) {
+		return tipoDao.save(tipo);
 		
 	}
 
@@ -37,6 +37,12 @@ public class TipoImpl implements TipoService{
 		}
 		
 		tipoDao.deleteById(id);
+	}
+
+	@Override
+	public List<Tipo> findAllActivo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

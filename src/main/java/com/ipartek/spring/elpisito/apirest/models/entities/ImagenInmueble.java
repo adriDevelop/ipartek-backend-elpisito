@@ -1,7 +1,5 @@
 package com.ipartek.spring.elpisito.apirest.models.entities;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,18 +14,26 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString 
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
-@Table(name="tipo")
-public class Tipo {
+@Table(name = "imagen")
+public class ImagenInmueble {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(unique = true)
-	private String nombre; // Piso, Chalet, Terreno...
-
+	private String nombre;
+	
+	@Column(name="alt_imagen")
+	private String alt_imagen;
+	
+	@Column
+	private Integer activo = 1;
+	
+	
 }

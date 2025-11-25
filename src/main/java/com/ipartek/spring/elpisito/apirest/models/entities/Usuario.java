@@ -22,10 +22,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name="usuarios")
-public class Usuario implements Serializable{
-
-	@Serial
-	private static final long serialVersionUID = 6309547869169816180L;
+public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // IDENTITY es un incremental para MySQL

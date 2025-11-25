@@ -5,18 +5,25 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.ipartek.spring.elpisito.apirest.exceptions.ApiExceptionHandler;
+import com.ipartek.spring.elpisito.apirest.exceptions.RecursoNoEncontradoException;
 import com.ipartek.spring.elpisito.apirest.models.dao.UsuarioDAO;
 import com.ipartek.spring.elpisito.apirest.models.entities.Usuario;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService{
+public class UsuarioServiceImpl implements GeneralService<Usuario>{
+
+    private final ApiExceptionHandler apiExceptionHandler;
 	
 	// Una de las principales características de un @Service es que sus atributos suelen ser (no siempre) DAOs 
 	// (repositorios)
 	
 	@Autowired
 	private UsuarioDAO usuarioDao;
+
+    UsuarioServiceImpl(ApiExceptionHandler apiExceptionHandler) {
+        this.apiExceptionHandler = apiExceptionHandler;
+    }
 	// usuarioDao automáticamente tiene todos los métodos implementados por hibernate de JpaRepository
 	// ¿Dónde están implementados? La implementación la ha hecho hibernate en el contexto de Spring.
 	// Se ha creado en el contexto una clase implementadora de UsuarioDao y en esa implementación
@@ -27,8 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 		List<Usuario> usuarios = usuarioDao.findAll();
 		return usuarios;
 	}
-
-	@Override
+	
 	public List<Usuario> findAllActive() {
 		return usuarioDao.findByActivo(1);
 	}
@@ -43,13 +49,10 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public Usuario findById(Long id) throws Exception {
-		Optional<Usuario> usuario = usuarioDao.findById(id);
-		if (usuario.isPresent()) {
-			return usuarioDao.findById(id).get();
-		}else {
-			throw new Exception("No se ha encontrado al usuario con id " + id);
-		}
+	public Usuario findById(Long id) {
+		
+		return usuarioDao.findById(id).orElseThrow(() -> new RecursoNoEncontradoException("No se ha encontrado al usuario con id " + id));
+		
 	}
 
 	@Override
@@ -62,6 +65,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 		}else {
 			throw new Exception("Usuario no encontrado");
 		}
+	}
+
+	@Override
+	public List<Usuario> findAllActivo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

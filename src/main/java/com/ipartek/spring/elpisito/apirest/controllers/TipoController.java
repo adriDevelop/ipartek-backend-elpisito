@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,76 +28,29 @@ public class TipoController {
 
 	// Get Tipo por id
 	@GetMapping("/tipo/{id}")
-	public ResponseEntity<?> findById(@PathVariable Long id) {
+	public ResponseEntity<Tipo> findById(@PathVariable Long id) {
 
-		// Necesito un map para mostrar los errores que pueda mostrar este método
-		Map<String, Object> response = new HashMap<>();
-		Tipo respuesta = new Tipo();
-
-		try {
-
-			respuesta = tipoService.findById(id);
-
-		} catch (Exception e) {
-			response.put("mensaje de error", "No se ha podido realizar la petición de búsqueda");
-			response.put("mensaje", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<Tipo>(respuesta, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(tipoService.findById(id));
 	}
 
 	// Get all tipos
 	@GetMapping("/tipos")
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<List<Tipo>> findAll() {
 
-		Map<String, Object> response = new HashMap<>();
-		List<Tipo> respuesta = new ArrayList<>();
-
-		try {
-
-			respuesta = tipoService.findAll();
-
-		} catch (Exception e) {
-			response.put("mensaje de error", "No se ha podido realizar la petición de búsqueda");
-			response.put("mensaje", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<List<Tipo>>(respuesta, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(tipoService.findAll());
 	}
 
 	// Guardar un tipo
 	@PostMapping("/tipo")
-	public ResponseEntity<?> save(@RequestBody Tipo tipo) {
+	public ResponseEntity<Tipo> save(@RequestBody Tipo tipo) {
 
-		Map<String, Object> response = new HashMap<>();
-
-		try {
-			tipoService.save(tipo);
-		} catch (Exception e) {
-			response.put("mensaje de error", "No se ha podido realizar el agregado");
-			response.put("mensaje", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		return new ResponseEntity<Tipo>(tipo, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.CREATED).body(tipoService.save(tipo));
 	}
 
 	// Actualizar un tipo
 	@PutMapping("/tipo")
-	public ResponseEntity<?> update(@RequestBody Tipo tipo) {
+	public ResponseEntity<Tipo> update(@RequestBody Tipo tipo) {
 
-		Map<String, Object> response = new HashMap<>();
-
-		try {
-			tipoService.save(tipo);
-		} catch (Exception e) {
-			response.put("mensaje de error", "No se ha podido realizar la actualización del objeto");
-			response.put("mensaje", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<Tipo>(tipo, HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body(tipoService.save(tipo));
 	}
 }

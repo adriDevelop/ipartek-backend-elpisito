@@ -1,5 +1,9 @@
 package com.ipartek.spring.elpisito.apirest.exceptions;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,63 +36,78 @@ public class ApiExceptionHandler {
 		return build(HttpStatus.BAD_REQUEST, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler(ErrorBaseDeDatosException.class)
 	public ResponseEntity<ErrorResponseDto> errorBaseDeDatos(ErrorBaseDeDatosException exception,
 			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+		return build(HttpStatus.CONFLICT, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> errorInternoServidor(ErrorInternoServidorException exception,
+//	@ExceptionHandler(ErrorInternoServidorException.class)
+//	public ResponseEntity<ErrorResponseDto> errorInternoServidor(ErrorInternoServidorException exception,
+//			HttpServletRequest req) {
+//		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+//	}
+
+	@ExceptionHandler(FormatoNoSoportadoException.class)
+	public ResponseEntity<ErrorResponseDto> formatoNoSoportado(FormatoNoSoportadoException exception,
 			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+		return build(HttpStatus.BAD_REQUEST, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> formatoNoSoportadoException(FormatoNoSoportadoException exception,
+	@ExceptionHandler(PeticionMalFormadaException.class)
+	public ResponseEntity<ErrorResponseDto> peticionMalFormada(PeticionMalFormadaException exception,
 			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+		return build(HttpStatus.BAD_REQUEST, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> noAutenticadoException(NoAutenticadoException exception,
+	@ExceptionHandler(RecursoEnUsoException.class)
+	public ResponseEntity<ErrorResponseDto> recursoEnUso(RecursoEnUsoException exception,
 			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+		return build(HttpStatus.CONFLICT, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> noAutorizadoException(NoAutorizadoException exception,
+	@ExceptionHandler(RecursoNoEncontradoException.class)
+	public ResponseEntity<ErrorResponseDto> recursoNoEncontrado(RecursoNoEncontradoException exception,
 			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+		return build(HttpStatus.NOT_FOUND, exception, req);
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> peticionMalFormadaException(PeticionMalFormadaException exception,
+	@ExceptionHandler(RecursoYaExistenteException.class)
+	public ResponseEntity<ErrorResponseDto> recursoYaExistente(RecursoYaExistenteException exception,
 			HttpServletRequest req) {
+		return build(HttpStatus.CONFLICT, exception, req);
+	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ErrorResponseDto> violacionDeDatos(DataIntegrityViolationException exception, HttpServletRequest req){
 		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
 	}
+	
+	//Intentamos actualizar un id inexistente
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	public ResponseEntity<ErrorResponseDto> emptyResultDataAccess(EmptyResultDataAccessException ex, HttpServletRequest req){
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> recursoEnUsoException(RecursoEnUsoException exception,
-			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+	return build(HttpStatus.NOT_FOUND, ex, req); //404
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> recursoNoEncontradoException(RecursoNoEncontradoException exception,
-			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
-	}
+	//BBDD caida
+	@ExceptionHandler(DataAccessResourceFailureException.class)
+	public ResponseEntity<ErrorResponseDto> dataAccessResourceFailure(DataAccessResourceFailureException ex, HttpServletRequest req){
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> recursoYaExistenteException(RecursoYaExistenteException exception,
-			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+	return build(HttpStatus.SERVICE_UNAVAILABLE, ex, req); //503
 	}
+	
+	// Pasamos un error incorrecto a la base de datos
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ErrorResponseDto> constraintViolation(ConstraintViolationException ex, HttpServletRequest req){
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponseDto> tokenExpiradoException(TokenExpiradoException exception,
-			HttpServletRequest req) {
-		return build(HttpStatus.INTERNAL_SERVER_ERROR, exception, req);
+	return build(HttpStatus.SERVICE_UNAVAILABLE, ex, req); //503
+	}
+	
+	// Intentamos pasar datos a la BBDD fuera de rango
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ErrorResponseDto> illegalArgument(IllegalArgumentException ex, HttpServletRequest req){
+
+	return build(HttpStatus.SERVICE_UNAVAILABLE, ex, req); //503
 	}
 }
