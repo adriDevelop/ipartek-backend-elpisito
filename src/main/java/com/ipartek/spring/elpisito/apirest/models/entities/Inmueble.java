@@ -2,14 +2,13 @@ package com.ipartek.spring.elpisito.apirest.models.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -54,7 +53,7 @@ public class Inmueble {
 	private String apertura; // Interior, exterior, semi-exterior
 	
 	@Column
-	private String orientación; // Norte, sur, este, oeste, sur-este
+	private String orientacion; // Norte, sur, este, oeste, sur-este
 	
 	@Column(name = "superficie_util")
 	private Double superficieUtil;
@@ -124,5 +123,12 @@ public class Inmueble {
 	
 	@OneToMany(mappedBy = "inmueble")
 	private List<ImagenInmueble> imagenesInmueble;
+	
+	@JoinColumn(name = "inmobiliaria")
+	@ManyToOne
+	private Inmobiliaria inmobiliaria;
+	
+	@ManyToMany(mappedBy = "inmueblesFavoritos")
+	private List<Usuario> usuariosFavoritos;
 	
 }

@@ -49,6 +49,11 @@ public class InmuebleRestController {
 		return ResponseEntity.status(HttpStatus.OK).body(inmuebleService.finder(idTipo, idOperacion, idLocalidad));
 	}
 	
+	@GetMapping("/inmuebles/{idInmobiliaria}")
+	public ResponseEntity<List<Inmueble>> finderInmueblesInmobiliaria(@PathVariable Long idInmobiliaria){
+		return ResponseEntity.status(HttpStatus.OK).body(inmuebleService.findByInmobiliaria(idInmobiliaria));
+	}
+	
 	@PutMapping("/inmueble")
 	public ResponseEntity<Inmueble> update(@RequestBody Inmueble inmueble){
 		return ResponseEntity.status(HttpStatus.CREATED).body(inmuebleService.save(inmueble));

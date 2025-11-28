@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ipartek.spring.elpisito.apirest.exceptions.RecursoNoEncontradoException;
+import com.ipartek.spring.elpisito.apirest.models.dao.InmobiliariaDAO;
 import com.ipartek.spring.elpisito.apirest.models.dao.InmuebleDAO;
 import com.ipartek.spring.elpisito.apirest.models.dao.LocalidadDAO;
 import com.ipartek.spring.elpisito.apirest.models.dao.OperacionDAO;
 import com.ipartek.spring.elpisito.apirest.models.dao.TipoDAO;
+import com.ipartek.spring.elpisito.apirest.models.entities.Inmobiliaria;
 import com.ipartek.spring.elpisito.apirest.models.entities.Inmueble;
 import com.ipartek.spring.elpisito.apirest.models.entities.Localidad;
 import com.ipartek.spring.elpisito.apirest.models.entities.Operacion;
@@ -26,6 +27,8 @@ public class InmuebleServiceImpl implements GeneralService<Inmueble> {
 	private OperacionDAO operacionDao;
 	@Autowired
 	private LocalidadDAO localidadDao;
+	@Autowired
+	private InmobiliariaDAO inmobiliariaDao;
 	
 	@Override
 	public Inmueble findById(Long id) {
@@ -62,6 +65,11 @@ public class InmuebleServiceImpl implements GeneralService<Inmueble> {
 		Operacion operacion = operacionDao.findById(idOperacion).orElseThrow(() -> new RecursoNoEncontradoException("No se ha encontrado la operacion con id " + idOperacion));
 		Localidad localidad = localidadDao.findById(idLocalidad).orElseThrow(() -> new RecursoNoEncontradoException("No se ha encontrado la localidad con id " + idLocalidad));
 		return inmuebleDao.findByTipoAndActivoAndOperacionAndLocalidad(tipo, 1, operacion, localidad);
+	}
+	
+	public List<Inmueble> findByInmobiliaria(Long idInmobiliaria){
+		Inmobiliaria inmobiliaria = inmobiliariaDao.findById(idInmobiliaria).orElseThrow(() -> new RecursoNoEncontradoException("No se han encontrado la inmobiliaria con id " + idInmobiliaria));
+		return inmuebleDao.findByActivoAndInmobiliaria(1, inmobiliaria);
 	}
 
 }
