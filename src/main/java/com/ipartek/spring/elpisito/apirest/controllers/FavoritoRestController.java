@@ -25,10 +25,9 @@ public class FavoritoRestController {
 	FavoritoService favoritoService;
 	
 	@PostMapping("/usuario-inmueble")
-	public ResponseEntity<FavoritoDTO> inmueblesFavoritos(@RequestParam Long usuarioId, @RequestParam Long inmuebleId){
+	public ResponseEntity<FavoritoDTO> inmueblesFavoritos(@RequestParam(name="usuid") Long usuarioId, @RequestParam(name="inmid") Long inmuebleId){
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(favoritoService.addFavorito(usuarioId, inmuebleId));
-		
 	}
 	
 	@DeleteMapping("/usuario-inmueble/{idUsuario}/{idInmueble}")
@@ -38,8 +37,13 @@ public class FavoritoRestController {
 	}
 	
 	@GetMapping("/usuario-inmueble/{idUsuario}")
-	public ResponseEntity<List<InmuebleDTO>> listarFavoritosCompleto(@PathVariable Long idUsuario){
+	public ResponseEntity<List<InmuebleDTO>> listarFavoritos(@PathVariable Long idUsuario){
 		return ResponseEntity.status(HttpStatus.CREATED).body(favoritoService.listarFavoritos(idUsuario));
+	}
+	
+	@GetMapping("/usuario-inmueble-completo/{idUsuario}")
+	public ResponseEntity<List<FavoritoDTO>> listarFavoritosCompleto(@PathVariable Long idUsuario){
+		return ResponseEntity.status(HttpStatus.CREATED).body(favoritoService.listarFavoritosCompleto(idUsuario));
 	}
 
 }

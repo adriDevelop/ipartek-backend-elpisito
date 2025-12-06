@@ -1,6 +1,7 @@
 package com.ipartek.spring.elpisito.apirest.models.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface UsuarioDAO extends JpaRepository<Usuario, Long>{
 	// podemos utilizar derived query methods
 	// El secreto deriva del nombre del método
 	List<Usuario> findByActivo(Integer activo);
+	
+	Optional<Usuario> findOneByNombre(String nombre);
 }

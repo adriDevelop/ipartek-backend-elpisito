@@ -55,10 +55,12 @@ public class FavoritoService {
 		return new FavoritoDTO(inmueble.getId(), nombreTipo, nombreLocalidad, nombreProvincia, nombreOperacion, inmueble.getPrecio(), nombreInmobiliaria);
 	}
 	
-	public Set<Inmueble> listarFavoritosCompleto(Long usuarioId){
+	public List<FavoritoDTO> listarFavoritosCompleto(Long usuarioId){
 		
 		Usuario usuario = usuarioDao.findById(usuarioId).orElseThrow(() -> new RecursoNoEncontradoException("No se ha encontrado al usuario con id " + usuarioId));
-		return usuario.getInmueblesFavoritos();
+		return usuario.getInmueblesFavoritos().stream()
+				.map(inmueble -> new FavoritoDTO(inmueble.getId(), inmueble.getTipo().getNombre(), inmueble.getLocalidad().getNombre(), inmueble.getLocalidad().getProvincia().getNombre(),inmueble.getOperacion().getNombre(), inmueble.getPrecio(), inmueble.getInmobiliaria().getNombre()))
+				.toList();
 	}
 	
 	// A partir de un id de Usuario devuelve los id de inmuebles favoritos

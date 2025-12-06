@@ -1,5 +1,10 @@
 package com.ipartek.spring.elpisito.apirest.exceptions;
 
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileSystemException;
+import java.nio.file.NoSuchFileException;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -110,4 +115,46 @@ public class ApiExceptionHandler {
 
 	return build(HttpStatus.SERVICE_UNAVAILABLE, ex, req); //503
 	}
+	
+	@ExceptionHandler(FileAlreadyExistsException.class)
+	public ResponseEntity<ErrorResponseDto> fileAlreadyExists(FileAlreadyExistsException ex, HttpServletRequest req){
+		return build(HttpStatus.INTERNAL_SERVER_ERROR, ex, req);
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ErrorResponseDto> accesDenied(AccessDeniedException ex, HttpServletRequest req){
+		return build(HttpStatus.INTERNAL_SERVER_ERROR, ex, req);
+	}
+	
+	@ExceptionHandler(NoSuchFileException.class)
+	public ResponseEntity<ErrorResponseDto> noSuchFile(NoSuchFileException ex, HttpServletRequest req){
+		return build(HttpStatus.INTERNAL_SERVER_ERROR, ex, req);
+	}
+	
+	@ExceptionHandler(FileSystemException.class)
+	public ResponseEntity<ErrorResponseDto> fileSystem(FileSystemException ex, HttpServletRequest req){
+		return build(HttpStatus.INTERNAL_SERVER_ERROR, ex, req);
+	}
+	
+	@ExceptionHandler(MultipartVacioException.class)
+	public ResponseEntity<ErrorResponseDto> multipartVacio(MultipartVacioException ex, HttpServletRequest req){
+		return build(HttpStatus.BAD_REQUEST, ex, req);
+	}
+	
+	@ExceptionHandler(MultipartTratamientoException.class)
+	public ResponseEntity<ErrorResponseDto> multipartTratamiento(MultipartTratamientoException ex, HttpServletRequest req){
+		return build(HttpStatus.BAD_REQUEST, ex, req);
+	}
+	
+	
+	@ExceptionHandler(SubidaFisicaArchivoException.class)
+	public ResponseEntity<ErrorResponseDto> subidaFisicaArchivo(SubidaFisicaArchivoException ex, HttpServletRequest req){
+		return build(HttpStatus.INTERNAL_SERVER_ERROR, ex, req);
+	}
+	
+	@ExceptionHandler(BorradoArchivoException.class)
+	public ResponseEntity<ErrorResponseDto> borradoArchivoException(BorradoArchivoException ex, HttpServletRequest req){
+		return build(HttpStatus.BAD_REQUEST, ex, req);
+	}
 }
+ 
